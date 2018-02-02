@@ -7,11 +7,13 @@ COPY documentation/examples/prometheus.yml  /etc/prometheus/prometheus.yml
 COPY console_libraries/                     /usr/share/prometheus/console_libraries/
 COPY consoles/                              /usr/share/prometheus/consoles/
 
+RUN adduser --uid 1005 --disabled-password prometheususer
+
 RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/
 RUN mkdir -p /prometheus && \
-    chown -R nobody:nogroup etc/prometheus /prometheus
+    chown -R prometheususer etc/prometheus /prometheus
 
-USER       nobody
+USER       prometheususer
 EXPOSE     9090
 VOLUME     [ "/prometheus" ]
 WORKDIR    /prometheus
